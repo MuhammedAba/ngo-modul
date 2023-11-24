@@ -1,0 +1,37 @@
+<odoo>
+    <data>
+        <template id="auth_signup_fields_inherited" inherit_id="auth_signup.fields">
+            <xpath expr="//div[@class='form-group field-confirm_password']" position="after">
+                <div class="form-group field-phone">
+                    <label for="phone">Telefon</label>
+                    <input type="char" name="phone" id="phone" class="form-control form-control-sm" required="required"/>
+                </div>
+                <div class="form-group field-yetenekler">
+                    <t t-name="ngo-modul.res_partner">
+                    <label for="volunteer_skills" class="control-label">Yeteneklerinizi Seçiniz</label>
+                    <select name="volunteer_skills" class="form-control link-style" widget="many2many_tags">
+                        <t t-foreach="skills_rec" t-as="skill">
+                            <option t-esc="skill.name" t-att-value="skill.id"/>
+                        </t>
+                    </select>
+                    </t>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="newTemplate" inherit_id="portal.portal_my_details">
+            <xpath expr="//div[@class='clearfix']" position="after">  
+            <div class="form-group field-yetenekler col-xl-6">
+                    <t t-name="ngo-modul.res_partner">
+                    <label for="volunteer_skills" class="control-label">Yeteneklerinizi Seçiniz</label>
+                    <select name="volunteer_skills" class="form-control link-style" widget="many2many_tags">
+                        <t t-foreach="skills_rec" t-as="skill">
+                            <option t-esc="skill.name" t-att-value="skill.id"/>
+                        </t>
+                    </select>
+                    </t>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

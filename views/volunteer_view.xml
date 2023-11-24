@@ -1,0 +1,40 @@
+<odoo>
+    <!-- <record id="action_ngo_volunteer" model="ir.actions.act_window">
+        <field name="name">Volunteer</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ngo.volunteer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smling_face">
+                Create your first Volunteer.
+            </p>
+        </field>
+    </record>
+
+     <record id="action_ngo_donors" model="ir.actions.act_window">
+        <field name="name">Donors</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ngo.donors</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smling_face">
+                Create your first Donors.
+            </p>
+        </field>
+    </record>
+
+     <record id="action_ngo" model="ir.actions.act_window">
+        <field name="name">Ngo</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ngo.volunteer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smling_face">
+                Create your first Volunteer.
+            </p>
+        </field>
+    </record> -->
+
+
+
+</odoo>

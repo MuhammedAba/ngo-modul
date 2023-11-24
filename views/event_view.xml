@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record id="view_project_form_inherit" model="ir.ui.view">
+          <field name="name">event.event.inherit</field>
+          <field name="model">event.event</field>
+          <field name="inherit_id" ref="event.view_event_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='address_id']" position="after" >
+                    <div colspan="2" class="o_checkbox_optional_field">
+                        <group>     
+                            <field name="project_skills"/>
+                        </group>
+                    </div>
+              </xpath>
+          </field>
+        </record>
+    </data>
+</odoo>

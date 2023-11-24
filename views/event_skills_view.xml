@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+     <record id="view_ngo_project_skills_tree" model="ir.ui.view">
+            <field name="name">project.skills.tree</field>
+            <field name="model">project.skills</field>
+               <field name="arch" type="xml">
+                <tree sample="1" multi_edit="1" export_xlsx="0">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="internal_notes"/>
+                </tree>
+            </field>
+        </record>
+
+     <record id="view_ngo_project_skills_form" model="ir.ui.view">
+            <field name="name">project.skills.form</field>
+            <field name="model">project.skills</field>
+               <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                       <group>
+                            <group>
+                                <field name="name"/>  
+                                <field name="code"/>  
+                            </group>
+                             <group>
+                                <field name="internal_notes"/>  
+                            </group>
+                       </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_ngo_project_skills" model="ir.actions.act_window">
+            <field name="name">Üye Yetenekleri</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">project.skills</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first project skills!
+                </p>
+            </field>
+        </record>
+
+     <menuitem  id="menu_ngo_project_skills"
+                    name="Proje Yetenekleri"
+                    action="action_ngo_project_skills"
+                    parent="menu_ngo_configuration"
+                    sequence="10"/>
+</odoo>
