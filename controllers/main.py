@@ -1,55 +1,60 @@
 from odoo import http
 from odoo.http import request
+from odoo.addons.portal.controllers.portal import CustomerPortal
 
 
-# class MyWebsiteController(http.Controller):
+class CustomerPortal(CustomerPortal):
+    @http.route(["/my/account"], type="http", auth="user", website=True)
+    def account(self, redirect=None, **post):
+        values = self._prepare_portal_layout_values()
+        partner = request.env.user.partner_id
+        values.update(
+            {
+                "error": {},
+                "error_message": [],
+            }
+        )
 
-#     @http.route('/web/signup?', type='http', auth="user", website=True)
-#     def your_route(self, **post):
+        if post and request.httprequest.method == "POST":
+            error, error_message = self.details_form_validate(post)
+            values.update({"error": error, "error_message": error_message})
+            values.update(post)
+            if not error:
+                values = {key: post[key] for key in self.MANDATORY_BILLING_FIELDS}
+                values.update(
+                    {
+                        key: post[key]
+                        for key in self.OPTIONAL_BILLING_FIELDS
+                        if key in post
+                    }
+                )
+                for field in set(["country_id", "state_id"]) & set(values.keys()):
+                    try:
+                        values[field] = int(values[field])
+                    except:
+                        values[field] = False
+                values.update({"zip": values.pop("zipcode", "")})
+                partner.sudo().write(values)
+                if redirect:
+                    return request.redirect(redirect)
+                return request.redirect("/my/home")
 
-#         # Telefon bilgisini al
-#         phone = post.get('phone')
+        countries = request.env["res.country"].sudo().search([])
+        states = request.env["res.country.state"].sudo().search([])
+        volunteer_skills = request.env["volunteer.skills"].sudo().search([])
 
-#         # Telefon bilgisini kaydet
-#         if phone:
-#             res_partner.write({'phone': phone})
-#         return http.request.render('your_module.your_template', {})
+        values.update(
+            {
+                "partner": partner,
+                "countries": countries,
+                "states": states,
+                "has_check_vat": hasattr(request.env["res.partner"], "check_vat"),
+                "redirect": redirect,
+                "page_name": "my_details",
+                "volunteer_skills": volunteer_skills,
+            }
+        )
 
-
-
-class WebsiteController(http.Controller):
-
-    @http.route('/web/signup?', type='http', auth="public", website=True)
-    def your_route(self, **kw):
-        volunteer_skills = request.env['ngo-modul'].search([]).mapped('volunteer_skills')
-        return http.request.render('ngo-modul.res_partner', {'volunteer_skills': volunteer_skills})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class StkPage(http.Controller):
-#     @http.route("/volunteer_webform", type="http", auth="public", website=True)
-#     def volunteer_webform(self, **kw):
-#         volSkill_rec = request.env["volunteer.skills"].sudo().search([])
-#         return http.request.render(
-#             "odoo-ngo.create_member", {'volSkill_rec': volSkill_rec}
-#         )
-
-#     @http.route("/create/volunteer", type="http", auth="public", website=True)
-#     def create_volunteer(self, **kw):
-#         print("Data received...", kw)
-#         request.env["res.partner"].sudo().create(kw)
-#         return request.render("odoo-ngo.volunteer_thanks", {})
+        response = request.render("portal.portal_my_details", values)
+        response.headers["X-Frame-Options"] = "DENY"
+        return response
