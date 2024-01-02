@@ -13,9 +13,7 @@ class Partner(models.Model):  # orjinalini yaz
     #volunteer_type = fields.Many2one("volunteer.types", string="Gönüllü Tipi")
     #donor_type = fields.Many2one("donor.types", string="Bağış Türü")
     
-    volunteer_skills = fields.Many2many(
-        "volunteer.skills", string="Gönüllü Yetenekleri",  widget='many2many_tags'
-    )
+    volunteer_skills = fields.Many2one("volunteer.skills", string="Gönüllü Yetenekleri",  widget='many2many_tags')
     test = fields.Char("Test")
 
     @api.constrains("name")

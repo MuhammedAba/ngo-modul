@@ -2,13 +2,21 @@
     <data>
         <template id="portal_my_details_inherited" inherit_id="portal.portal_my_details">
             <xpath expr="//div[@class='clearfix']" position="after">  
-            <div class="form-group col-xl-6">
-                    <label for="volunteer_skills" class="control-label">Yeteneklerinizi Seçiniz</label>
-                    <select name="volunteer_skills"  id="volunteer_skills" class="js-example-basic-multiple col-xl-12 mb-1 new-get_data" widget="many2many" required="required">
-                        <t t-foreach="volunteer_skills" t-as="skill">
-                            <option t-esc="skill.name" t-att-value="skill.id"/>
+            
+                <div t-attf-class="form-group #{error.get('volunteer_skills') and 'o_has_error' or ''} col-xl-6">
+                    <label class="col-form-label" for="volunteer_skills">Yeteneğinizi Seçiniz..</label>
+                    <select name="volunteer_skills" t-attf-class="form-control #{error.get('volunteer_skills') and 'is-invalid' or ''}">
+                        <option value="">Skill...</option>
+                        <t t-foreach="volunteer_skills or []" t-as="skill">
+                            <option t-att-value="skill.id" t-att-selected="skill.id == int(volunteer_skills.id) if country_id else skill.id == partner.volunteer_skills.id">
+                                <t t-esc="skill.name" />
+                            </option>
                         </t>
                     </select>
+                </div>
+                <div t-attf-class="form-group #{error.get('test') and 'o_has_error' or ''} col-xl-6">
+                    <label class="col-form-label" for="test">test</label>
+                    <input type="text" name="test" t-attf-class="form-control #{error.get('test') and 'is-invalid' or ''}" t-att-value="test or partner.test" />
                 </div>
             </xpath>
         </template>

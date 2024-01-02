@@ -4,6 +4,8 @@ from odoo.addons.portal.controllers.portal import CustomerPortal
 
 
 class CustomerPortal(CustomerPortal):
+    OPTIONAL_BILLING_FIELDS = ["zipcode", "state_id", "vat", "company_name","test","volunteer_skills"]
+
     @http.route(["/my/account"], type="http", auth="user", website=True)
     def account(self, redirect=None, **post):
         values = self._prepare_portal_layout_values()
@@ -14,7 +16,22 @@ class CustomerPortal(CustomerPortal):
                 "error_message": [],
             }
         )
-
+        countries = request.env["res.country"].sudo().search([])
+        states = request.env["res.country.state"].sudo().search([])
+        volunteer_skills = request.env["volunteer.skills"].sudo().search([])
+        values.update(
+            {
+                "partner": partner,
+                "countries": countries,
+                "states": states,
+                "has_check_vat": hasattr(request.env["res.partner"], "check_vat"),
+                "redirect": redirect,
+                "page_name": "my_details",
+                "volunteer_skills": volunteer_skills,
+                'test':partner.test,
+            }
+        )
+        
         if post and request.httprequest.method == "POST":
             error, error_message = self.details_form_validate(post)
             values.update({"error": error, "error_message": error_message})
@@ -38,23 +55,6 @@ class CustomerPortal(CustomerPortal):
                 if redirect:
                     return request.redirect(redirect)
                 return request.redirect("/my/home")
-
-        countries = request.env["res.country"].sudo().search([])
-        states = request.env["res.country.state"].sudo().search([])
-        volunteer_skills = request.env["volunteer.skills"].sudo().search([])
-
-        values.update(
-            {
-                "partner": partner,
-                "countries": countries,
-                "states": states,
-                "has_check_vat": hasattr(request.env["res.partner"], "check_vat"),
-                "redirect": redirect,
-                "page_name": "my_details",
-                "volunteer_skills": volunteer_skills,
-            }
-        )
-
         response = request.render("portal.portal_my_details", values)
         response.headers["X-Frame-Options"] = "DENY"
         return response
