@@ -13,7 +13,7 @@
                             </option>
                         </t>
                     </select>
-                </div>
+                </div>  
                 <div t-attf-class="form-group #{error.get('test') and 'o_has_error' or ''} col-xl-6">
                     <label class="col-form-label" for="test">test</label>
                     <input type="text" name="test" t-attf-class="form-control #{error.get('test') and 'is-invalid' or ''}" t-att-value="test or partner.test" />

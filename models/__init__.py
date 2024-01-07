@@ -1,2 +1,8 @@
 # -*- coding: utf-8 -*-
-from . import res_partner, volunteer_skills,project_skills,event
+from . import (
+    res_partner,
+    volunteer_skills,
+    project_skills,
+    event,
+    res_users,
+)

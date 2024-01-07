@@ -1,10 +1,18 @@
 from odoo import http
 from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal
+from odoo.exceptions import ValidationError
 
 
 class CustomerPortal(CustomerPortal):
-    OPTIONAL_BILLING_FIELDS = ["zipcode", "state_id", "vat", "company_name","test","volunteer_skills"]
+    OPTIONAL_BILLING_FIELDS = [
+        "zipcode",
+        "state_id",
+        "vat",
+        "company_name",
+        "test",
+        "volunteer_skills",
+    ]
 
     @http.route(["/my/account"], type="http", auth="user", website=True)
     def account(self, redirect=None, **post):
@@ -28,10 +36,10 @@ class CustomerPortal(CustomerPortal):
                 "redirect": redirect,
                 "page_name": "my_details",
                 "volunteer_skills": volunteer_skills,
-                'test':partner.test,
+                "test": partner.test,
             }
         )
-        
+
         if post and request.httprequest.method == "POST":
             error, error_message = self.details_form_validate(post)
             values.update({"error": error, "error_message": error_message})
