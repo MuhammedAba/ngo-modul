@@ -6,10 +6,9 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//page[@name = 'internal_notes']" position="after">
-                    <page string="Volunteer Skills" name="volunteerSkills">   
+                    <page string="Skills" name="volunteerSkills">   
                       <group>
                            <field name="volunteer_skills"/>
-                           <field name="test"/>
                       </group>
                   </page>
                 </xpath> 

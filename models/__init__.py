@@ -4,5 +4,5 @@ from . import (
     volunteer_skills,
     project_skills,
     event,
-    res_users,
+    member_types,
 )

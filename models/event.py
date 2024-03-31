@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 class EventEvent(models.Model):
@@ -7,12 +7,12 @@ class EventEvent(models.Model):
     _description = "Event"
 
     project_skills = fields.Many2many("project.skills", string="Proje Yetenekleri")
-    tetiklendi_flag = fields.Boolean(default=True)
+    test1=fields.Char("Test for event")
+   
 
     @api.onchange("stage_id")
     def on_change_stage(self):
         partners = self.env["res.partner"].search([])
-        kontrol = 0
         gonderiliyor_stage_no = self.env["event.stage"].search(
             args=[("name", "=", "Mail Gönderiliyor")]
         )
@@ -30,19 +30,45 @@ class EventEvent(models.Model):
             for event in etkinlikler:
                 if partner.volunteer_skills.id == event.tag_ids.id:
                     print(
-                        "*******************************************"
+                        "*************************************************\n"
                         + f"Eşleşen Kayıt - Partner: {partner.name}, Event: {event.name}"
-                        + "***************************"
+                        + "\n*************************************************\n"
                     )
+                    # E-posta gönderme metodu çağrılıyor
+                    self.send_email_to_user(partner, event)
 
-        print("***********************************: ", len(etkinlikler))
         if len(etkinlikler) > 0:
             for etkinlik in etkinlikler:
-                print("Etkinlik no1:", etkinlik.stage_id)
-                if kontrol == 1:
+                print("+++++++++++++++++++",etkinlik.test1)
+                if etkinlik.test1=="Doğru":
                     etkinlik.stage_id = gonderildi_stage_no.id
-                    print("Kontrol = 1")
-                if kontrol == 0:
+                else:
                     etkinlik.stage_id = gonderilemedi_stage_no.id
-                    print("Etkinlik no2:", etkinlik.stage_id)
             self.env.cr.commit()
+
+    def send_email_to_user(self, partner, event):
+        print(f"Mail Gönderilen Kisinin Maili : {partner.email}\n ")
+        body = (
+            """
+            Merhabalar kuruluşumuzda eklediğiniz yetenek ile bu hafta eklenen etkinliğimizde ihtiyac duyulan  yetenek eşleşmiştir.
+            En kısa sürede aşağıda belirtilen linke tıklayarak etkinliğe ulaşıp kayıt  yapabilirsiniz.
+            İyi günler...\n"""
+            + "\nEtkinlik ismi : "
+            + event.name
+            + "\nEtkinliğe ulaşmak için linke tıklayın: <a href='http://localhost:8069"
+            + event.website_url
+            + "'>Etkinlik Linki</a>"
+        )
+        mail_values = {
+            "email_to": partner.email,
+            "body_html": body,
+            "subject": "Etkinlik Bilgilendirmesi",
+            "state": "outgoing",
+        }
+
+        mail = self.env["mail.mail"].create(mail_values)
+        mail.send()
+
+        if mail.state == "sent":
+            event.write({"test1": "Doğru"})
+            print("++++++++++++++++++++++++++\nMailler gönderildi.\n++++++++++++++++++++++++++++ ")

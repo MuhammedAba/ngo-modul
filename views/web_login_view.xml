@@ -1,9 +1,8 @@
 <odoo>
     <data>
         <template id="portal_my_details_inherited" inherit_id="portal.portal_my_details">
-            <xpath expr="//div[@class='clearfix']" position="after">  
-            
-                <div t-attf-class="form-group #{error.get('volunteer_skills') and 'o_has_error' or ''} col-xl-6">
+            <xpath expr="//div[@class='clearfix']" position="after">
+                 <div t-attf-class="form-group #{error.get('volunteer_skills') and 'o_has_error' or ''} col-xl-6">
                     <label class="col-form-label" for="volunteer_skills">Yeteneğinizi Seçiniz..</label>
                     <select name="volunteer_skills" t-attf-class="form-control #{error.get('volunteer_skills') and 'is-invalid' or ''}">
                         <option value="">Skill...</option>
@@ -14,10 +13,6 @@
                         </t>
                     </select>
                 </div>  
-                <div t-attf-class="form-group #{error.get('test') and 'o_has_error' or ''} col-xl-6">
-                    <label class="col-form-label" for="test">test</label>
-                    <input type="text" name="test" t-attf-class="form-control #{error.get('test') and 'is-invalid' or ''}" t-att-value="test or partner.test" />
-                </div>
             </xpath>
         </template>
     </data>

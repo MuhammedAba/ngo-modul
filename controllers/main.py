@@ -1,7 +1,10 @@
+from odoo.addons.web.controllers.main import ensure_db, Home, SIGN_UP_REQUEST_PARAMS
 from odoo import http
 from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
+import re
+from odoo.addons.web.controllers.main import Home
 
 
 class CustomerPortal(CustomerPortal):
@@ -36,7 +39,6 @@ class CustomerPortal(CustomerPortal):
                 "redirect": redirect,
                 "page_name": "my_details",
                 "volunteer_skills": volunteer_skills,
-                "test": partner.test,
             }
         )
 
@@ -66,3 +68,44 @@ class CustomerPortal(CustomerPortal):
         response = request.render("portal.portal_my_details", values)
         response.headers["X-Frame-Options"] = "DENY"
         return response
+
+
+class AuthSignupHome(Home):
+    def _prepare_signup_values(self, qcontext):
+        values = {key: qcontext.get(key) for key in ("login", "name", "password")}
+        email = values.get("login")
+        name = values.get("name")
+
+        regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
+        if re.fullmatch(regex, email):
+            pass
+        else:
+            raise ValidationError("Email yapısı uygun değil.")
+
+        if (
+            len(name) > 30
+            or len(name) < 2
+            or any(char in "0123456789_*/+-" for char in name)
+        ):
+            raise UserError(
+                "İsim 30 karakterden fazla olamaz, 2 karakterden az olamaz, sayı ve özel karakter içeremez."
+            )
+
+        password = values.get("password")
+        if (
+            len(password) < 8
+            or not any(char.isdigit() for char in password)
+            or not any(char in "_*/!$-" for char in password)
+        ):
+            raise UserError(
+                "Şifre en az 8 karakterden oluşmalı ve en az bir sayı ile bir özel karakter (_*/!$-) içermelidir. Lütfen Tekrar girin."
+            )
+
+        return values
+
+
+# class Academy(http.Controller):
+#     @http.route("/academy/academy/", auth="public")
+#     def index(self, **kw):
+
+#         return http.request.render("ngo-modul.hello_world_template", {})

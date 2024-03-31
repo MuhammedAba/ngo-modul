@@ -10,7 +10,7 @@
 
     <menuitem id="menu_ngo_donors_volunteer"
                 parent="menu_ngo_root"
-                name="Volunteers"
+                name="Gönüllü Üyeler"
                 action="contacts.action_contacts"
                 sequence = "1"/>
                 
@@ -18,11 +18,11 @@
 
     <menuitem id="menu_ngo_configuration"
                 parent="menu_ngo_root"
-                name="Configuration"
+                name="Ek Ayarlar"
                 sequence = "4"/>
     
     <record id="contacts.action_contacts" model="ir.actions.act_window">
-        <field name="name">Volunteers</field>
+        <field name="name">Gönüllü Üyeler</field>
         
     </record>
 
