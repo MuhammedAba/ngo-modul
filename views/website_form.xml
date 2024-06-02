@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo> 
+    <template id="website_form_page" name="Form Page">
+    <t t-call="website.layout">
+        <div id="wrap" class="wrap-branch">
+            <div class="oe_structure">
+                <div class="container-branch">
+                    <!-- <h1>Select Ülke and State</h1> -->
+                    <form id="country_state_form">
+                        <div class="form-group-branch">
+                            <label for="country">ÜLKE:</label>
+                            <select id="country" name="country_id" class="form-control-branch">
+                                <option value="">Ülke Seçiniz</option>
+                                <t t-foreach="request.env['res.country'].search([])" t-as="country">
+                                    <option t-att-value="country.id" t-esc="country.name"/>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="form-group-branch">
+                            <label for="state">ŞEHİR:</label>
+                            <select id="state" name="state_id" class="form-control-branch">
+                                <option value="">Şehir Seçiniz</option>
+                            </select>
+                        </div>
+                         <div class="form-group-branch">
+                            <label for="branch">ŞUBE:</label>
+                            <select id="branch" name="branch_id" class="form-control-branch">
+                                <option value="">Şube Seçiniz</option>
+                            </select>
+                        </div>
+                            <button type="button" id="show_branch_info" class="btn btn-primary-branch">Şubeleri Göster</button>
+                    </form>
+                    <p>Merhaba</p>
+                    <div id="branch_info"></div>
+                </div>
+            </div>
+        </div>
+    </t>
+</template> 
+<template id="branch_info" name="Branch Info">
+    <div>
+        <div class="branch-info-header">
+            <p class="header-title">Şube Bilgileri</p>
+        </div>
+        <div class="branch-name">
+            <p class="info-label">Şube Adı: <t t-esc="branch.name"/></p>
+        </div>
+        <div class="branch-info-details">
+            <p class="info-label">Şube Başkanı: <t t-esc="branch.branch_baskan"/></p>
+            <p class="info-label">Şube Adresi: <t t-esc="branch.branch_address"/></p>
+            <p class="info-label">Telefon No: <t t-esc="branch.branch_phone"/></p>
+            <p class="info-label">Fax: <t t-esc="branch.branch_fax"/></p>
+        </div>
+    </div>
+</template>
+</odoo>

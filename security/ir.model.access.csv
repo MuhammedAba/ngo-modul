@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 ngo-modul.access_volunteer_skills,access_volunteer_skills,ngo-modul.model_volunteer_skills,base.group_user,1,1,0,0
+ngo-modul.access_project_skills,access_project_skills,ngo-modul.model_project_skills,base.group_user,1,0,0,0
+ngo-modul.access_ngo_branches,access_ngo_branches,ngo-modul.model_ngo_branches,base.group_user,1,0,0,0

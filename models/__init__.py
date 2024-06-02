@@ -5,4 +5,6 @@ from . import (
     project_skills,
     event,
     member_types,
+    ngo_branches,
+    res_city,
 )

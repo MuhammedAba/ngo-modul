@@ -28,7 +28,7 @@ class EventEvent(models.Model):
 
         for partner in partners:
             for event in etkinlikler:
-                if partner.volunteer_skills.id == event.tag_ids.id:
+                if partner.volunteer_skills.id == event.tag_ids.id: #id'ye göre eşleme yapılıyor. 
                     print(
                         "*************************************************\n"
                         + f"Eşleşen Kayıt - Partner: {partner.name}, Event: {event.name}"

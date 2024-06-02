@@ -100,12 +100,45 @@ class AuthSignupHome(Home):
             raise UserError(
                 "Şifre en az 8 karakterden oluşmalı ve en az bir sayı ile bir özel karakter (_*/!$-) içermelidir. Lütfen Tekrar girin."
             )
+        if values.get("password") != qcontext.get("confirm_password"):
+            raise UserError (
+                "Şifre eşleşmesi doğrulanmadı tekrar giriniz."
+            )
 
         return values
 
+from odoo import http
 
-# class Academy(http.Controller):
-#     @http.route("/academy/academy/", auth="public")
-#     def index(self, **kw):
 
-#         return http.request.render("ngo-modul.hello_world_template", {})
+class WebsiteForm(http.Controller):
+
+    @http.route("/get_states", type="json", auth="public")
+    def get_states(self, country_id):
+        states = request.env["res.country.state"].search(
+            [("country_id", "=", country_id)]
+        )
+        return [{"id": state.id, "name": state.name} for state in states]
+
+    @http.route("/get_branches", type="json", auth="public")
+    def get_branches(self, state_id):
+        branches = request.env["res.city"].search(
+            [("state_id", "=", state_id)]
+        )
+        return [{"id": branch.id, "name": branch.name} for branch in branches]
+
+    @http.route("/subeler", type="http", auth="public", website=True)
+    def form_page(self, **kwargs):
+        return http.request.render("ngo-modul.website_form_page")
+
+    @http.route("/get_branch_info", type="json", auth="public")
+    def get_branch_info(self, branch_id):
+        branch = request.env["res.city"].browse(int(branch_id))
+        if branch.exists():
+            return http.request.env["ir.ui.view"]._render_template(
+                "ngo-modul.branch_info",
+                {
+                    "branch": branch,
+                },
+            )
+        else:
+            return {"error": "Branch not found"}

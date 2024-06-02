@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="hello_world_template" name="Hello World Template">
+        <t t-call="web.layout">
+            <div class="container">
+                <h1>Hello, World!</h1>
+                <p>This is a test template.</p>
+            </div>
+        </t>
+    </template>
+</odoo>
